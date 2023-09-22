@@ -1,16 +1,7 @@
 import pygame
 import settings
 
-class WeaponsIterRegistry(type):
-    def __iter__(self):
-        for attr in dir(self):
-            if not attr.startswith("__"):
-                yield attr
-
-class PlayerWeapons():
-        
-    __metaclass__ = WeaponsIterRegistry
-    
+class PlayerWeapons():   
     def __init__(self, image_name: str, dmg: int, fire_rate:int, speed: int, image_count: int):
         self.image_name = image_name
         self.dmg = dmg
