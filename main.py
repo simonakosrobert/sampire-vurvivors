@@ -3,18 +3,21 @@ import math
 import random as rn
 from decimal import Decimal, getcontext
 
+pygame.init()
+
 #Local
 import settings
 import utilities
 import weapons
 import characters
-
-pygame.init()
+from sounds import Sounds
 
 clock = pygame.time.Clock()
 
 tick = 0
 last_mouse_y = 0
+
+
 
 # img = pygame.image.load('gfx_new\game_icon.png')
 # pygame.display.set_icon(img)
@@ -28,6 +31,8 @@ run = True
 
 background = pygame.image.load(r'images\background.jpg')
 background = pygame.transform.scale(background, (settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
+
+Sounds.Music.Music.play(-1)
 
 getcontext().prec = 3
 
@@ -80,7 +85,7 @@ def use_weapon(screen, player, tick, weapon_list, closest_enemy, enemy_list):
                 item[1][0] += -item[1][3] * item[1][2]
                 item[1][1] += -item[1][4] * item[1][2]
         
-def weapon_hit(weapon_list, enemy_list):
+def weapon_hit(weapon_list, enemy_list, enemy_dict):
     for enemy in enemy_list:
         for e_key in tuple(enemy.dict.keys()):
             for weapon in weapon_list:
@@ -91,6 +96,7 @@ def weapon_hit(weapon_list, enemy_list):
                         
                         if enemy.dict[e_key][2] <= 0:
                             del enemy.dict[e_key]
+                            del enemy_dict[e_key]
                             break
                         
 def enemy_push(enemy_list):
@@ -153,7 +159,7 @@ if __name__ == '__main__':
         closest_enemy = closest_enemy_calc(imre, enemies_list)
         
         pebble.use_weapon(screen, imre, tick, weapons_list, closest_enemy=closest_enemy, enemy_list=enemies_list)
-        weapon_hit(weapons_list, enemies_list)
+        weapon_hit(weapons_list, enemies_list, enemy_dict=enemies_dict)
         
         health_percentage = float(imre.health) / float(imre.max_health)
 
