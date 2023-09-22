@@ -2,7 +2,6 @@ import pygame
 import math
 import random as rn
 from decimal import Decimal, getcontext
-import pymunk
 
 #Local
 import settings
@@ -23,8 +22,6 @@ last_mouse_y = 0
 screen = pygame.display.set_mode((settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
 pygame.display.set_caption("Sampire Vurvivors")
 
-space = pymunk.Space()
-
 #pygame.event.set_grab(True)
 
 run = True
@@ -33,6 +30,8 @@ background = pygame.image.load(r'images\background.jpg')
 background = pygame.transform.scale(background, (settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
 
 getcontext().prec = 3
+
+enemies_dict = {}
 
 pebble = weapons.PlayerWeapons('pebble', 10, 3, 8, 4)   #Name - dmg - fire rate - speed - image count
 weapons_list = [pebble]
@@ -95,10 +94,36 @@ def weapon_hit(weapon_list, enemy_list):
                             break
                         
 def enemy_push(enemy_list):
-    for enemy in enemy_list:
-        for item in enemy.dict.items():
-            pass
+        
+    for main_index, main_enemy in enumerate(enemy_list):
+        for target_index, target_enemy in enumerate(enemy_list):
+            for main_key, main_value in main_enemy.dict.items():
+                for target_key, target_value in target_enemy.dict.items():
+                    
+                    
+                    if main_key != target_key and \
+                        main_value[0] + 10 < target_value[0] + target_enemy.image.get_width() and \
+                        main_value[0] + main_enemy.image.get_width() - 10 > target_value[0] and \
+                        main_value[1] + 30 < target_value[1] + target_enemy.image.get_height() and \
+                        main_value[1] + main_enemy.image.get_height() - 30 > target_value[1]:
                         
+                        #First enemy
+                        dx, dy = main_value[0] - target_value[0], main_value[1] - target_value[1]
+                        dist = math.hypot(dx, dy)
+                        dx, dy = dx / dist, dy / dist  # Normalize.
+                        # Move along this normalized vector towards the player at current speed.
+                        main_value[0] += dx * main_value[3]
+                        main_value[1] += dy * main_value[3]
+                        
+                        #Second enemy
+                        dx, dy = target_value[0] - main_value[0], target_value[1] - main_value[1]
+                        dist = math.hypot(dx, dy)
+                        dx, dy = dx / dist, dy / dist  # Normalize.
+                        # Move along this normalized vector towards the player at current speed.
+                        target_value[0] += dx * main_value[3]
+                        target_value[1] += dy * main_value[3]
+                        
+                                            
 if __name__ == '__main__':
 
     while run:
@@ -110,13 +135,20 @@ if __name__ == '__main__':
         screen.fill(0)
         screen.blit(background, (0,0))
 
-        screen.blit(imre.image, imre.pos)
+        screen.blit(imre.image, imre.pos)  
                 
-        for enemy in enemies_list:
+        for enemy in enemies_list:            
             characters.Character.move_towards_player(player=imre, enemy=enemy)
             characters.Character.collision_detection(player=imre, enemy=enemy)
-            characters.Character.enemy_spawner(tick=tick, spawn_rate = 1, enemy=enemy)
-            characters.Character.enemy_blit(screen=screen, enemy=enemy)
+            characters.Character.enemy_spawner(tick=tick, spawn_rate = 2, enemy=enemy)
+            
+        for enemy in enemies_list:
+            enemies_dict.update(enemy.dict)
+                    
+        enemies_dict = dict(sorted(enemies_dict.items(), key=lambda item: item[1][1]))
+        characters.Character.enemy_blit(screen=screen, enemy=enemies_dict)         
+            
+        enemy_push(enemy_list=enemies_list)
               
         closest_enemy = closest_enemy_calc(imre, enemies_list)
         
@@ -149,5 +181,5 @@ if __name__ == '__main__':
 
         pygame.display.update()
         
-        space.step(1/settings.FPS)
-    
+        if tick % settings.FPS/3 == 0:
+            print(clock.get_fps())
