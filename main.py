@@ -3,14 +3,18 @@ import math
 import random as rn
 from decimal import Decimal, getcontext
 
-pygame.init()
-
 #Local
 import settings
+
+pygame.init()
+screen = pygame.display.set_mode((settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
+pygame.display.set_caption("Sampire Vurvivors")
+
 import utilities
 import weapons
 import characters
-from sounds import Sounds
+import sounds
+import button
 
 clock = pygame.time.Clock()
 
@@ -22,9 +26,6 @@ last_mouse_y = 0
 # img = pygame.image.load('gfx_new\game_icon.png')
 # pygame.display.set_icon(img)
 
-screen = pygame.display.set_mode((settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
-pygame.display.set_caption("Sampire Vurvivors")
-
 #pygame.event.set_grab(True)
 
 run = True
@@ -32,7 +33,8 @@ run = True
 background = pygame.image.load(r'images\background.jpg')
 background = pygame.transform.scale(background, (settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
 
-Sounds.Music.Music.play(-1)
+main_menu_bg = pygame.image.load(r'images\main_menu.jpg')
+main_menu_bg = pygame.transform.scale(main_menu_bg, (settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
 
 getcontext().prec = 3
 
@@ -41,12 +43,16 @@ enemies_dict = {}
 pebble = weapons.PlayerWeapons('pebble', 10, 3, 8, 4)   #Name - dmg - fire rate - speed - image count
 weapons_list = [pebble]
 
-elvira = characters.Character(1, [0, 0], 'elvira', [], 0, 0, 50, 0.1)
+elvira = characters.Character(1, [0, 0], 'elvira', [], 0, 0, 50, 0.1, settings.SCALE)
 enemies_list = [elvira]
 
-imre = characters.Character(3, [0, 0], 'imre', [], 0, 0, 100, 0)
+imre = characters.Character(3, [0, 0], 'imre', [], 0, 0, 100, 0, settings.SCALE)
 #Panda initial starting point
 imre.pos = [(settings.SCREEN_WIDTH-imre.image.get_width())/2, (settings.SCREEN_HEIGHT-imre.image.get_height())/2]
+
+def draw_text(text, font, text_col, x, y):
+  img = font.render(text, True, text_col)
+  screen.blit(img, (x, y))
                                             
 def closest_enemy_calc(player, enemies):
     
@@ -55,7 +61,7 @@ def closest_enemy_calc(player, enemies):
     for enemy in enemies:
         for item in enemy.dict.items():
             dx, dy = player.pos[0] - item[1][0], player.pos[1] - item[1][1]
-            dist[item[0]] = (math.hypot(dx, dy), item[1][0]-enemy.image.get_width()/2, item[1][1]-enemy.image.get_height()/2)
+            dist[item[0]] = (math.hypot(dx, dy), item[1][0], item[1][1])
     
     closest = ('', 1000000, 0, 0)
     
@@ -128,54 +134,68 @@ def enemy_push(enemy_list):
                         # Move along this normalized vector towards the player at current speed.
                         target_value[0] += dx * main_value[3]
                         target_value[1] += dy * main_value[3]
-                        
+
+main_menu = True                
                                             
 if __name__ == '__main__':
 
     while run:
 
-        current_health = imre.health
-
+        pygame.event.get()
         clock.tick(settings.FPS)
         tick += 1
         screen.fill(0)
-        screen.blit(background, (0,0))
 
-        screen.blit(imre.image, imre.pos)  
-                
-        for enemy in enemies_list:            
-            characters.Character.move_towards_player(player=imre, enemy=enemy)
-            characters.Character.collision_detection(player=imre, enemy=enemy)
-            characters.Character.enemy_spawner(tick=tick, spawn_rate = 2, enemy=enemy)
-            
-        for enemy in enemies_list:
-            enemies_dict.update(enemy.dict)
+        if main_menu:
+
+            sounds.Main_music.play_sound(-1)
+            screen.blit(main_menu_bg, (0,0))
+
+            if button.resume_button.draw(screen):
+                sounds.Main_music.stop_sound()
+                main_menu = False
+            if button.options_button.draw(screen):
+                pass
+            if button.quit_button.draw(screen):
+                run = False        
+        else:
+            screen.blit(background, (0,0))
+
+            screen.blit(imre.image, imre.pos)  
                     
-        enemies_dict = dict(sorted(enemies_dict.items(), key=lambda item: item[1][1]))
-        characters.Character.enemy_blit(screen=screen, enemy=enemies_dict)         
+            for enemy in enemies_list:            
+                characters.Character.move_towards_player(player=imre, enemy=enemy)
+                characters.Character.collision_detection(player=imre, enemy=enemy)
+                characters.Character.enemy_spawner(tick=tick, spawn_rate = 2, enemy=enemy)
+                
+            for enemy in enemies_list:
+                enemies_dict.update(enemy.dict)
+                        
+            enemies_dict = dict(sorted(enemies_dict.items(), key=lambda item: item[1][1]))
+            characters.Character.enemy_blit(screen=screen, enemy=enemies_dict)         
+                
+            enemy_push(enemy_list=enemies_list)
+                
+            closest_enemy = closest_enemy_calc(imre, enemies_list)
             
-        enemy_push(enemy_list=enemies_list)
-              
-        closest_enemy = closest_enemy_calc(imre, enemies_list)
-        
-        pebble.use_weapon(screen, imre, tick, weapons_list, closest_enemy=closest_enemy, enemy_list=enemies_list)
-        weapon_hit(weapons_list, enemies_list, enemy_dict=enemies_dict)
-        
-        health_percentage = float(imre.health) / float(imre.max_health)
+            pebble.use_weapon(screen, imre, tick, weapons_list, closest_enemy=closest_enemy, enemy_list=enemies_list)
+            weapon_hit(weapons_list, enemies_list, enemy_dict=enemies_dict)
+            
+            health_percentage = float(imre.health) / float(imre.max_health)
 
-        if imre.health < imre.max_health:
-            utilities.DrawBar(screen, (imre.pos[0], imre.pos[1] + imre.image.get_height() + 3), (40, 4), (0, 0, 0), (255, 0, 0), health_percentage)
+            if imre.health < imre.max_health:
+                utilities.DrawBar(screen, (imre.pos[0], imre.pos[1] + imre.image.get_height() + 3), (40 * settings.SCALE, 4 * settings.SCALE), (0, 0, 0), (255, 0, 0), health_percentage)
 
-        keys = pygame.key.get_pressed()
-        
-        if keys[pygame.K_s]:
-            imre.pos[1] += imre.speed
-        if keys[pygame.K_w]:
-            imre.pos[1] -= imre.speed
-        if keys[pygame.K_d]:
-            imre.pos[0] += imre.speed
-        if keys[pygame.K_a]:
-            imre.pos[0] -= imre.speed
+            keys = pygame.key.get_pressed()
+            
+            if keys[pygame.K_s]:
+                imre.pos[1] += imre.speed
+            if keys[pygame.K_w]:
+                imre.pos[1] -= imre.speed
+            if keys[pygame.K_d]:
+                imre.pos[0] += imre.speed
+            if keys[pygame.K_a]:
+                imre.pos[0] -= imre.speed
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -187,5 +207,5 @@ if __name__ == '__main__':
 
         pygame.display.update()
         
-        if tick % settings.FPS/3 == 0:
-            print(clock.get_fps())
+        # if tick % settings.FPS/3 == 0:
+        #     print(clock.get_fps())

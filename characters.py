@@ -7,8 +7,8 @@ import random as rn
 import settings
 
 class Character():
-    def __init__(self, speed:int, pos:int, image_name:str, spawn_list:list, xp:int, point:int, health: Decimal, dmg: Decimal):
-        self.speed = speed
+    def __init__(self, speed:int, pos:int, image_name:str, spawn_list:list, xp:int, point:int, health: Decimal, dmg: Decimal, scale: float):
+        self.speed = speed * scale
         self.spawn_list = spawn_list
         self.dict = {}
         self.xp = xp
@@ -42,7 +42,7 @@ class Character():
                     item[1][3] = 0.2 #Speed
                     player.health -= enemy.dmg
             else:
-                item[1][3] = 1 #Speed
+                item[1][3] = enemy.speed #Speed
                 
     @classmethod
     def enemy_spawner(self, tick, spawn_rate, enemy):
