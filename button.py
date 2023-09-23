@@ -8,8 +8,8 @@ class Button():
         self.image = pygame.transform.scale(image, (int(width * scale), int(height * scale)))
         self.rect = self.image.get_rect()
         self.height_offset = height_offset * scale
-        self.width_offset = width_offset * scale
-        self.rect.topleft = (settings.SCREEN_WIDTH/2 - self.image.get_width()/2 - self.width_offset, settings.SCREEN_HEIGHT/2 - self.image.get_height()/2 - self.height_offset)
+        self.width_offset = width_offset
+        self.rect.topleft = (settings.SCREEN_WIDTH/2 - self.image.get_width()/2 + self.width_offset, settings.SCREEN_HEIGHT/2 - self.image.get_height()/2 + self.height_offset)
         self.clicked = False
 
     def draw(self, surface):
@@ -38,6 +38,6 @@ resume_img = pygame.image.load('images/buttons/button_resume.png').convert_alpha
 options_img = pygame.image.load('images/buttons/button_options.png').convert_alpha()
 quit_img = pygame.image.load('images/buttons/button_quit.png').convert_alpha()
 
-resume_button = Button(resume_img, settings.SCALE, 0, 50)
-options_button = Button(options_img, settings.SCALE, 0, -50)
-quit_button = Button(quit_img, settings.SCALE, 0, -150)
+resume_button = Button(resume_img, settings.SCALE, settings.SCREEN_WIDTH/4, -50)
+options_button = Button(options_img, settings.SCALE, settings.SCREEN_WIDTH/4, 50)
+quit_button = Button(quit_img, settings.SCALE, settings.SCREEN_WIDTH/4, 150)

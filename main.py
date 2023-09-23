@@ -34,7 +34,7 @@ background = pygame.image.load(r'images\background.jpg')
 background = pygame.transform.scale(background, (settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
 
 main_menu_bg = pygame.image.load(r'images\main_menu.jpg')
-main_menu_bg = pygame.transform.scale(main_menu_bg, (settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
+main_menu_bg = pygame.transform.scale(main_menu_bg, (main_menu_bg.get_width() * (settings.SCREEN_HEIGHT/main_menu_bg.get_height()), settings.SCREEN_HEIGHT))
 
 getcontext().prec = 3
 
@@ -203,7 +203,7 @@ if __name__ == '__main__':
             
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    run = False             
+                    main_menu = True           
 
         pygame.display.update()
         
