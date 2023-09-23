@@ -38,6 +38,6 @@ resume_img = pygame.image.load('images/buttons/button_resume.png').convert_alpha
 options_img = pygame.image.load('images/buttons/button_options.png').convert_alpha()
 quit_img = pygame.image.load('images/buttons/button_quit.png').convert_alpha()
 
-resume_button = Button(resume_img, settings.SCALE, settings.SCREEN_WIDTH/4, -50)
-options_button = Button(options_img, settings.SCALE, settings.SCREEN_WIDTH/4, 50)
-quit_button = Button(quit_img, settings.SCALE, settings.SCREEN_WIDTH/4, 150)
+resume_button = Button(resume_img, settings.SCALE, settings.SCREEN_WIDTH/3, -100)
+options_button = Button(options_img, settings.SCALE, settings.SCREEN_WIDTH/3, 0)
+quit_button = Button(quit_img, settings.SCALE, settings.SCREEN_WIDTH/3, 100)
