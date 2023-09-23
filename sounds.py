@@ -18,4 +18,7 @@ class Sounds():
             self.sound.stop()
             self.is_playing = False
             
-Main_music = Sounds('Music/munka.mp3', 0.2)
+Main_music = Sounds('music/munka.mp3', 0.2)
+Stage_1_music = Sounds('music/munka_2.mp3', 0.2)
+
+music_list = [Main_music, Stage_1_music]

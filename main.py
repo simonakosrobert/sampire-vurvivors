@@ -154,6 +154,8 @@ if __name__ == '__main__':
         screen.fill(0)
 
         if main_menu:
+
+            
             
             sounds.Main_music.play_sound(-1)
 
@@ -184,6 +186,9 @@ if __name__ == '__main__':
             if button.quit_button.draw(screen):
                 run = False        
         else:
+
+            sounds.Stage_1_music.play_sound(-1)
+
             screen.blit(background, (0,0))
 
             screen.blit(imre.image, imre.pos)  
@@ -228,7 +233,10 @@ if __name__ == '__main__':
             
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    main_menu = True           
+                    if not main_menu:
+                        for music in sounds.music_list:
+                            music.stop_sound()   
+                    main_menu = True    
 
         pygame.display.update()
         
