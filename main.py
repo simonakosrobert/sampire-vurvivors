@@ -2,6 +2,7 @@ import pygame
 import math
 import random as rn
 from decimal import Decimal, getcontext
+import cv2
 
 #Local
 import settings
@@ -27,6 +28,10 @@ last_mouse_y = 0
 # pygame.display.set_icon(img)
 
 #pygame.event.set_grab(True)
+
+cap = cv2.VideoCapture('videos/unseated.mp4')
+success, img = cap.read()
+shape = img.shape[1::-1]
 
 run = True
 
@@ -135,7 +140,9 @@ def enemy_push(enemy_list):
                         target_value[0] += dx * main_value[3]
                         target_value[1] += dy * main_value[3]
 
-main_menu = True                
+main_menu = True    
+first_run = True       
+video_frame = None     
                                             
 if __name__ == '__main__':
 
@@ -147,9 +154,27 @@ if __name__ == '__main__':
         screen.fill(0)
 
         if main_menu:
-
+            
             sounds.Main_music.play_sound(-1)
-            screen.blit(main_menu_bg, (0,0))
+
+            if first_run:
+                success, img = cap.read()
+
+                if img is None:
+                    first_run = False
+                    # # ------------- FOR LOOPING
+                    # cap = cv2.VideoCapture('videos/unseated.mp4')
+                    # success, img = cap.read()
+                    # video_frame = pygame.image.frombuffer(img.tobytes(), shape, "BGR")
+                    # video_frame = pygame.transform.scale(video_frame, (settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
+                    # # ------------- FOR LOOPING
+                    screen.blit(video_frame, (0,0))
+                else:
+                    video_frame = pygame.image.frombuffer(img.tobytes(), shape, "BGR")
+                    video_frame = pygame.transform.scale(video_frame, (settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
+                    screen.blit(video_frame, (0, 0))         
+            else:        
+                screen.blit(video_frame, (0,0))
 
             if button.resume_button.draw(screen):
                 sounds.Main_music.stop_sound()
