@@ -17,6 +17,10 @@ class Sounds():
         if self.is_playing:
             self.sound.stop()
             self.is_playing = False
+
+    def pause_sound(self):
+        if self.is_playing:
+            self.sound.pause()
             
 Main_music = Sounds('music/munka.mp3', 0.2)
 Stage_1_music = Sounds('music/munka_2.mp3', 0.2)
