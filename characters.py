@@ -2,6 +2,7 @@ import pygame
 from decimal import Decimal
 import math
 import random as rn
+import utilities
 
 #Local
 import settings
@@ -18,7 +19,7 @@ class Character():
         self.health = Decimal(health)
         self.dmg = Decimal(dmg)
         self.image_name = image_name
-        self.image = pygame.image.load(f'images\{self.image_name}.png').convert_alpha()
+        self.image = pygame.image.load(utilities.resource_path(f'{self.image_name}.png')).convert_alpha()
         self.image = pygame.transform.scale(self.image, (self.image.get_width()*((settings.SCREEN_HEIGHT+settings.SCREEN_WIDTH)/500), self.image.get_height()*((settings.SCREEN_HEIGHT+settings.SCREEN_WIDTH)/500)))
     
     @classmethod

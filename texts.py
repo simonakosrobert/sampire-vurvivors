@@ -1,10 +1,11 @@
 import pygame
 import settings
 import math
+import utilities
 
 pygame.font.init()
 
-dmg_font = pygame.font.Font('fonts/dmg_font.ttf', math.floor(20 * settings.SCALE))
+dmg_font = pygame.font.Font(utilities.resource_path('dmg_font.ttf'), math.floor(20 * settings.SCALE))
 
 dmg_txt_list = []
 

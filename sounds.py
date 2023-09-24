@@ -1,4 +1,5 @@
 import pygame
+import utilities
 
 class Sounds():
     def __init__(self, path: str, volume: float) -> None:
@@ -21,8 +22,11 @@ class Sounds():
     def pause_sound(self):
         if self.is_playing:
             self.sound.pause()
-            
-Main_music = Sounds('music/munka.mp3', 0.2)
-Stage_1_music = Sounds('music/munka_2.mp3', 0.2)
 
+try:
+    Main_music = Sounds(utilities.resource_path(r'munka.mp3'), 0.2)
+    Stage_1_music = Sounds(utilities.resource_path(r'munka_2.mp3'), 0.2)
+except Exception as e:
+    print("Error: ", e)
+    
 music_list = [Main_music, Stage_1_music]

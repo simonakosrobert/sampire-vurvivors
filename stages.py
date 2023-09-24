@@ -1,5 +1,6 @@
 import pygame
 import settings 
+import utilities
 
 class Stage():
     def __init__(self, image_name: str, image_count: int, has_border: bool, borders: tuple = (0, 0, 0, 0)):
@@ -8,7 +9,7 @@ class Stage():
         self.borders = borders
         self.dict = {f'{self.image_name}_0': [0, 0]}
         for i in range(0, image_count):
-            image = pygame.image.load(f'images\\{image_name}_{i}.jpg').convert_alpha()
+            image = pygame.image.load(utilities.resource_path(f'{image_name}_{i}.jpg')).convert_alpha()
             setattr(Stage, f'image_{i}', pygame.transform.scale(image, (settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT)))
         
     def spawn_despawn(self, tick):

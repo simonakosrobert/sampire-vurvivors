@@ -1,5 +1,6 @@
 import pygame
 import settings
+import utilities
 
 class Button():
     def __init__(self, image, scale, width_offset, height_offset):
@@ -34,9 +35,9 @@ class Button():
 
         return action
     
-resume_img = pygame.image.load('images/buttons/button_resume.png').convert_alpha()
-options_img = pygame.image.load('images/buttons/button_options.png').convert_alpha()
-quit_img = pygame.image.load('images/buttons/button_quit.png').convert_alpha()
+resume_img = pygame.image.load(utilities.resource_path('buttons/button_resume.png')).convert_alpha()
+options_img = pygame.image.load(utilities.resource_path('buttons/button_options.png')).convert_alpha()
+quit_img = pygame.image.load(utilities.resource_path('buttons/button_quit.png')).convert_alpha()
 
 resume_button = Button(resume_img, settings.SCALE, settings.SCREEN_WIDTH/3, -100)
 options_button = Button(options_img, settings.SCALE, settings.SCREEN_WIDTH/3, 0)

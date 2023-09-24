@@ -2,6 +2,7 @@ import pygame
 import settings
 import random as rn
 import math
+import utilities
 
 class PlayerWeapons():   
     def __init__(self, image_name: str, dmg: int, fire_rate:int, speed: int, image_count: int):
@@ -11,7 +12,7 @@ class PlayerWeapons():
         self.speed = speed
         self.dict = {}
         for i in range(0, image_count):
-            image = pygame.image.load(f'images\\{image_name}_{i}.png').convert_alpha()
+            image = pygame.image.load(utilities.resource_path(f'{image_name}_{i}.png')).convert_alpha()
             setattr(PlayerWeapons, f'image_{i}', pygame.transform.scale(image, (image.get_width()*((settings.SCREEN_HEIGHT+settings.SCREEN_WIDTH)/500), image.get_height()*((settings.SCREEN_HEIGHT+settings.SCREEN_WIDTH)/500))))
             
     def use_weapon(self, screen, player, tick, weapon_list, closest_enemy, enemy_list):

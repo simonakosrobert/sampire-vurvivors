@@ -3,6 +3,11 @@ import math
 import random as rn
 from decimal import Decimal, getcontext
 import cv2
+import os
+
+# print(os.getcwd())
+# print(os.listdir(os.getcwd()))
+# pause = input('PAUSE')
 
 #Local
 import settings
@@ -10,7 +15,7 @@ import settings
 pygame.init()
 
 
-screen = pygame.display.set_mode((settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
+screen = pygame.display.set_mode((settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT), pygame.NOFRAME)
 pygame.display.set_caption("Sampire Vurvivors")
 
 import utilities
@@ -27,20 +32,18 @@ clock = pygame.time.Clock()
 tick = 0
 last_mouse_y = 0
 
-
-
-# img = pygame.image.load('gfx_new\game_icon.png')
-# pygame.display.set_icon(img)
+icon = pygame.image.load(utilities.resource_path('icon.png'))
+pygame.display.set_icon(icon)
 
 #pygame.event.set_grab(True)
 
-cap = cv2.VideoCapture('videos/unseated.mp4')
+cap = cv2.VideoCapture(utilities.resource_path('unseated.mp4'))
 success, img = cap.read()
 shape = img.shape[1::-1]
 
 run = True
 
-main_menu_bg = pygame.image.load(r'images\main_menu.jpg')
+main_menu_bg = pygame.image.load(utilities.resource_path(r'main_menu.jpg'))
 main_menu_bg = pygame.transform.scale(main_menu_bg, (main_menu_bg.get_width() * (settings.SCREEN_HEIGHT/main_menu_bg.get_height()), settings.SCREEN_HEIGHT))
 
 getcontext().prec = 3
@@ -371,7 +374,7 @@ if __name__ == '__main__':
                     if not main_menu:
                         for music in sounds.music_list:
                             music.stop_sound()
-                        cap = cv2.VideoCapture('videos/unseated.mp4')
+                        cap = cv2.VideoCapture(utilities.resource_path('unseated.mp4'))
                         video_playing = True
                     main_menu = True
             
@@ -379,7 +382,7 @@ if __name__ == '__main__':
             if not main_menu:
                 for music in sounds.music_list:
                     music.stop_sound()
-                cap = cv2.VideoCapture('videos/unseated.mp4')
+                cap = cv2.VideoCapture(utilities.resource_path('unseated.mp4'))
                 video_playing = True
             main_menu = True
 
