@@ -8,6 +8,8 @@ import cv2
 import settings
 
 pygame.init()
+
+
 screen = pygame.display.set_mode((settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
 pygame.display.set_caption("Sampire Vurvivors")
 
@@ -18,6 +20,7 @@ import sounds
 import button
 import stages
 import texts
+import controls
 
 clock = pygame.time.Clock()
 
@@ -218,71 +221,146 @@ if __name__ == '__main__':
             if imre.health < imre.max_health:
                 utilities.DrawBar(screen, (imre.pos[0], imre.pos[1] + imre.image.get_height() + 3), (40 * settings.SCALE, 4 * settings.SCALE), (0, 0, 0), (255, 0, 0), health_percentage)
 
-            keys = pygame.key.get_pressed()
-            
-            if keys[pygame.K_s]:
-                
-                #Background moving
-                for key, value in stages.office_stage.dict.items():
-                    value[1] -= imre.speed
-                #Enemy moving
-                for key, value in enemies_dict.items():
-                    value[1] -= imre.speed
-                    #Weapons moving
-                for weapon in weapons_list:
-                    for key, value in weapon.dict.items(): #[f'{weapon.image_name}-{tick}'] = [x, y, weapon.speed, dx, dy, image_to_blit]
+            # KEYBOARD MOVEMENT P1 ---------------------------------
+            if controls.num_joysticks == 0:
+                keys = pygame.key.get_pressed()
+
+                if keys[pygame.K_s]:
+                    
+                    #Background moving
+                    for key, value in stages.office_stage.dict.items():
                         value[1] -= imre.speed
-                #Text moving
-                for item in texts.dmg_txt_list:
-                    item[2][1] -= imre.speed
+                    #Enemy moving
+                    for key, value in enemies_dict.items():
+                        value[1] -= imre.speed
+                    #Weapons moving
+                    for weapon in weapons_list:
+                        for key, value in weapon.dict.items(): #[f'{weapon.image_name}-{tick}'] = [x, y, weapon.speed, dx, dy, image_to_blit]
+                            value[1] -= imre.speed
+                    #Text moving
+                    for item in texts.dmg_txt_list:
+                        item[2][1] -= imre.speed
 
-            if keys[pygame.K_w]:
+                if keys[pygame.K_w]:
 
-                #Background moving
-                for key, value in stages.office_stage.dict.items():
-                    value[1] += imre.speed
-                #Enemy moving
-                for key, value in enemies_dict.items():
-                    value[1] += imre.speed
-                #Weapons moving
-                for weapon in weapons_list:
-                    for key, value in weapon.dict.items(): #[f'{weapon.image_name}-{tick}'] = [x, y, weapon.speed, dx, dy, image_to_blit]
+                    #Background moving
+                    for key, value in stages.office_stage.dict.items():
                         value[1] += imre.speed
-                #Text moving
-                for item in texts.dmg_txt_list:
-                    item[2][1] += imre.speed
+                    #Enemy moving
+                    for key, value in enemies_dict.items():
+                        value[1] += imre.speed
+                    #Weapons moving
+                    for weapon in weapons_list:
+                        for key, value in weapon.dict.items(): #[f'{weapon.image_name}-{tick}'] = [x, y, weapon.speed, dx, dy, image_to_blit]
+                            value[1] += imre.speed
+                    #Text moving
+                    for item in texts.dmg_txt_list:
+                        item[2][1] += imre.speed
 
-            if keys[pygame.K_d]:
+                if keys[pygame.K_d]:
 
-                #Background moving
-                for key, value in stages.office_stage.dict.items():
-                    value[0] -= imre.speed
-                #Enemy moving
-                for key, value in enemies_dict.items():
-                    value[0] -= imre.speed
-                #Weapons moving
-                for weapon in weapons_list:
-                    for key, value in weapon.dict.items(): #[f'{weapon.image_name}-{tick}'] = [x, y, weapon.speed, dx, dy, image_to_blit]
+                    #Background moving
+                    for key, value in stages.office_stage.dict.items():
                         value[0] -= imre.speed
-                #Text moving
-                for item in texts.dmg_txt_list:
-                    item[2][0] -= imre.speed
-                
-            if keys[pygame.K_a]:
+                    #Enemy moving
+                    for key, value in enemies_dict.items():
+                        value[0] -= imre.speed
+                    #Weapons moving
+                    for weapon in weapons_list:
+                        for key, value in weapon.dict.items(): #[f'{weapon.image_name}-{tick}'] = [x, y, weapon.speed, dx, dy, image_to_blit]
+                            value[0] -= imre.speed
+                    #Text moving
+                    for item in texts.dmg_txt_list:
+                        item[2][0] -= imre.speed
+                    
+                if keys[pygame.K_a]:
 
-                #Background moving
-                for key, value in stages.office_stage.dict.items():
-                    value[0] += imre.speed
-                #Enemy moving
-                for key, value in enemies_dict.items():
-                    value[0] += imre.speed
-                #Weapons moving
-                for weapon in weapons_list:
-                    for key, value in weapon.dict.items(): #[f'{weapon.image_name}-{tick}'] = [x, y, weapon.speed, dx, dy, image_to_blit]
+                    #Background moving
+                    for key, value in stages.office_stage.dict.items():
                         value[0] += imre.speed
-                #Text moving
-                for item in texts.dmg_txt_list:
-                    item[2][0] += imre.speed
+                    #Enemy moving
+                    for key, value in enemies_dict.items():
+                        value[0] += imre.speed
+                    #Weapons moving
+                    for weapon in weapons_list:
+                        for key, value in weapon.dict.items(): #[f'{weapon.image_name}-{tick}'] = [x, y, weapon.speed, dx, dy, image_to_blit]
+                            value[0] += imre.speed
+                    #Text moving
+                    for item in texts.dmg_txt_list:
+                        item[2][0] += imre.speed
+            # CONTROLLER MOVEMENT P1 ---------------------------------
+            else: 
+                if controls.p1_controller.get_axis(1) > 0.1:
+                    
+                    moving_speed = imre.speed * abs(controls.p1_controller.get_axis(1))
+
+                    #Background moving
+                    for key, value in stages.office_stage.dict.items():
+                        value[1] -= moving_speed
+                    #Enemy moving
+                    for key, value in enemies_dict.items():
+                        value[1] -= moving_speed
+                    #Weapons moving
+                    for weapon in weapons_list:
+                        for key, value in weapon.dict.items(): #[f'{weapon.image_name}-{tick}'] = [x, y, weapon.speed, dx, dy, image_to_blit]
+                            value[1] -= moving_speed
+                    #Text moving
+                    for item in texts.dmg_txt_list:
+                        item[2][1] -= moving_speed
+
+                if controls.p1_controller.get_axis(1) < -0.1:
+                    
+                    moving_speed = imre.speed * abs(controls.p1_controller.get_axis(1))
+
+                    #Background moving
+                    for key, value in stages.office_stage.dict.items():
+                        value[1] += moving_speed
+                    #Enemy moving
+                    for key, value in enemies_dict.items():
+                        value[1] += moving_speed
+                    #Weapons moving
+                    for weapon in weapons_list:
+                        for key, value in weapon.dict.items(): #[f'{weapon.image_name}-{tick}'] = [x, y, weapon.speed, dx, dy, image_to_blit]
+                            value[1] += moving_speed
+                    #Text moving
+                    for item in texts.dmg_txt_list:
+                        item[2][1] += moving_speed
+
+                if controls.p1_controller.get_axis(0) > 0.1:
+
+                    moving_speed = imre.speed * abs(controls.p1_controller.get_axis(0))
+
+                    #Background moving
+                    for key, value in stages.office_stage.dict.items():
+                        value[0] -= moving_speed
+                    #Enemy moving
+                    for key, value in enemies_dict.items():
+                        value[0] -= moving_speed
+                    #Weapons moving
+                    for weapon in weapons_list:
+                        for key, value in weapon.dict.items(): #[f'{weapon.image_name}-{tick}'] = [x, y, weapon.speed, dx, dy, image_to_blit]
+                            value[0] -= moving_speed
+                    #Text moving
+                    for item in texts.dmg_txt_list:
+                        item[2][0] -= moving_speed
+                    
+                if controls.p1_controller.get_axis(0) < -0.1:
+
+                    moving_speed = imre.speed * abs(controls.p1_controller.get_axis(0))
+
+                    #Background moving
+                    for key, value in stages.office_stage.dict.items():
+                        value[0] += moving_speed
+                    #Enemy moving
+                    for key, value in enemies_dict.items():
+                        value[0] += moving_speed
+                    #Weapons moving
+                    for weapon in weapons_list:
+                        for key, value in weapon.dict.items(): #[f'{weapon.image_name}-{tick}'] = [x, y, weapon.speed, dx, dy, image_to_blit]
+                            value[0] += moving_speed
+                    #Text moving
+                    for item in texts.dmg_txt_list:
+                        item[2][0] += moving_speed
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -295,7 +373,15 @@ if __name__ == '__main__':
                             music.stop_sound()
                         cap = cv2.VideoCapture('videos/unseated.mp4')
                         video_playing = True
-                    main_menu = True    
+                    main_menu = True
+            
+        if controls.p1_controller and controls.p1_controller.get_button(7):
+            if not main_menu:
+                for music in sounds.music_list:
+                    music.stop_sound()
+                cap = cv2.VideoCapture('videos/unseated.mp4')
+                video_playing = True
+            main_menu = True
 
         pygame.display.update()
         
