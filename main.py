@@ -6,7 +6,7 @@ progress_count = 6
 loading_bar_size = (800, 30)
 loading_bar_pos = (settings.SCREEN_WIDTH/2 - loading_bar_size[0]/2, settings.SCREEN_HEIGHT/5 - loading_bar_size[1]/2)
 
-loading_bg = pygame.image.load('images/loading_screen_bg.jpg')
+loading_bg = pygame.image.load(utilities.resource_path('loading_screen_bg.jpg'))
 loading_bg = pygame.transform.scale(loading_bg, (settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
 
 pygame.init()
