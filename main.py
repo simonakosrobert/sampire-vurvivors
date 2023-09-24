@@ -1,24 +1,32 @@
 import pygame
+import settings #Local settings
+import utilities #Local utilities
+
+progress_count = 6
+loading_bar_size = (800, 30)
+loading_bar_pos = (settings.SCREEN_WIDTH/2 - loading_bar_size[0]/2, settings.SCREEN_HEIGHT/5 - loading_bar_size[1]/2)
+
+loading_bg = pygame.image.load('images/loading_screen_bg.jpg')
+loading_bg = pygame.transform.scale(loading_bg, (settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
+
+pygame.init()
+screen = pygame.display.set_mode((settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT))
+pygame.display.set_caption("Sampire Vurvivors")
+screen.fill(0)
+screen.blit(loading_bg, (0, 0))
+utilities.DrawBar(screen, loading_bar_pos, loading_bar_size, (255, 255, 255), (255, 0, 0), 0/progress_count)
+pygame.display.update()
+
 import math
 import random as rn
 from decimal import Decimal, getcontext
 import cv2
-import os
 
-# print(os.getcwd())
-# print(os.listdir(os.getcwd()))
-# pause = input('PAUSE')
+utilities.DrawBar(screen, loading_bar_pos, loading_bar_size, (255, 255, 255), (255, 0, 0), 1/progress_count)
+pygame.display.update()
 
 #Local
-import settings
 
-pygame.init()
-
-
-screen = pygame.display.set_mode((settings.SCREEN_WIDTH, settings.SCREEN_HEIGHT), pygame.NOFRAME)
-pygame.display.set_caption("Sampire Vurvivors")
-
-import utilities
 import weapons
 import characters
 import sounds
@@ -26,6 +34,9 @@ import button
 import stages
 import texts
 import controls
+
+utilities.DrawBar(screen, loading_bar_pos, loading_bar_size, (255, 255, 255), (255, 0, 0), 2/progress_count)
+pygame.display.update()
 
 clock = pygame.time.Clock()
 
@@ -41,12 +52,18 @@ cap = cv2.VideoCapture(utilities.resource_path('unseated.mp4'))
 success, img = cap.read()
 shape = img.shape[1::-1]
 
+utilities.DrawBar(screen, loading_bar_pos, loading_bar_size, (255, 255, 255), (255, 0, 0), 3/progress_count)
+pygame.display.update()
+
 run = True
 
 main_menu_bg = pygame.image.load(utilities.resource_path(r'main_menu.jpg'))
 main_menu_bg = pygame.transform.scale(main_menu_bg, (main_menu_bg.get_width() * (settings.SCREEN_HEIGHT/main_menu_bg.get_height()), settings.SCREEN_HEIGHT))
 
 getcontext().prec = 3
+
+utilities.DrawBar(screen, loading_bar_pos, loading_bar_size, (255, 255, 255), (255, 0, 0), 4/progress_count)
+pygame.display.update()
 
 enemies_dict = {}
 
@@ -59,6 +76,9 @@ enemies_list = [elvira]
 imre = characters.Character(3, [0, 0], 'imre', [], 0, 0, 100, 0, settings.SCALE)
 #Panda initial starting point
 imre.pos = [(settings.SCREEN_WIDTH-imre.image.get_width())/2, (settings.SCREEN_HEIGHT-imre.image.get_height())/2]
+
+utilities.DrawBar(screen, loading_bar_pos, loading_bar_size, (255, 255, 255), (255, 0, 0), 5/progress_count)
+pygame.display.update()
 
 def draw_text(text, font, text_col, x, y):
   img = font.render(text, True, text_col)
@@ -149,7 +169,10 @@ def enemy_push(enemy_list):
 
 main_menu = True    
 video_playing = True       
-video_frame = None     
+video_frame = None
+
+utilities.DrawBar(screen, loading_bar_pos, loading_bar_size, (255, 255, 255), (255, 0, 0), 6/progress_count)
+pygame.display.update()
                                             
 if __name__ == '__main__':
 
