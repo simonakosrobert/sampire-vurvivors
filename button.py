@@ -34,6 +34,8 @@ class Button():
 
         return action
     
+
+# Main menu ------------------
 start_img = pygame.image.load('images/buttons/start_button.png').convert_alpha()
 options_img = pygame.image.load('images/buttons/options_button.png').convert_alpha()
 quit_img = pygame.image.load('images/buttons/quit_button.png').convert_alpha()
@@ -41,3 +43,11 @@ quit_img = pygame.image.load('images/buttons/quit_button.png').convert_alpha()
 start_button = Button(start_img, settings.SCALE, settings.SCREEN_WIDTH/3.5, -100)
 options_button = Button(options_img, settings.SCALE, settings.SCREEN_WIDTH/3.5, 0)
 quit_button = Button(quit_img, settings.SCALE, settings.SCREEN_WIDTH/3.5, 100)
+
+# Pause menu --------------
+resume_button = pygame.image.load('images/buttons/resume_button.png').convert_alpha()
+pause_main_menu_button = pygame.image.load('images/buttons/pause_main_menu_button.png').convert_alpha()
+
+resume_button = Button(resume_button, settings.SCALE/1.5, -settings.SCREEN_WIDTH/6, 200)
+pause_options_button = Button(options_img, settings.SCALE/1.5, 0, 200)
+pause_main_menu_button = Button(pause_main_menu_button, settings.SCALE/1.5, settings.SCREEN_WIDTH/6, 200)

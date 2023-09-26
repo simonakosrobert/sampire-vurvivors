@@ -30,10 +30,14 @@ class PlayerWeapons():
                     dx, dy = dx / dist, dy / dist  # Normalize.
                     weapon.dict[f'{weapon.image_name}-{tick}'] = [player.pos[0], player.pos[1], weapon.speed, dx, dy, image_to_blit]
                 
-                for item in weapon.dict.items():
-                    screen.blit(getattr(self, f'image_{item[1][5]}'), (item[1][0], item[1][1]))
+                for item in weapon.dict.items():            
                     item[1][0] += -item[1][3] * item[1][2]
                     item[1][1] += -item[1][4] * item[1][2]
+
+    def blit_weapon(self, screen, weapon_list):
+        for weapon in weapon_list:
+            for item in weapon.dict.items():
+                screen.blit(getattr(self, f'image_{item[1][5]}'), (item[1][0], item[1][1]))
             
 
 

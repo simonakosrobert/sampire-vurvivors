@@ -15,3 +15,6 @@ def DrawBar(screen, pos:tuple, size:tuple, borderC:tuple, barC:tuple, progress:f
     innerPos  = (pos[0], pos[1])
     innerSize = ((size[0]-1) * progress, size[1]-1)
     pygame.draw.rect(screen, barC, (*innerPos, *innerSize))
+
+def levelUp():
+    pass
