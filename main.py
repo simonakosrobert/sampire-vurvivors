@@ -545,6 +545,9 @@ if __name__ == '__main__':
                         #Text moving
                         for item in texts.dmg_txt_list:
                             item[2][0] += moving_speed
+
+                    # if movement_pressed:
+                    #     last_pressed = 
                         #____________________________________________________________________________________________________________________
 
         for event in pygame.event.get():
