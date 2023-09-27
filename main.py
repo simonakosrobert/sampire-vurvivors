@@ -555,15 +555,15 @@ if __name__ == '__main__':
                 run = False
             
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE and not game_paused:
+                if event.key == pygame.K_ESCAPE and not game_paused and not main_menu:
                     game_paused = True
-                elif event.key == pygame.K_ESCAPE and game_paused:
+                elif event.key == pygame.K_ESCAPE and game_paused and not main_menu:
                     game_paused = False  
 
-        if controls.p1_controller and controls.p1_controller.get_button(7) and not game_paused and not controller_menu_btn:
+        if controls.p1_controller and controls.p1_controller.get_button(7) and not game_paused and not controller_menu_btn and not main_menu:
             game_paused = True
             controller_menu_btn = True
-        elif controls.p1_controller and (controls.p1_controller.get_button(7) or controls.p1_controller.get_button(1)) and game_paused and not controller_menu_btn:
+        elif controls.p1_controller and (controls.p1_controller.get_button(7) or controls.p1_controller.get_button(1)) and game_paused and not controller_menu_btn and not main_menu:
             game_paused = False
             controller_menu_btn = True
 
@@ -578,6 +578,7 @@ if __name__ == '__main__':
             if button.pause_main_menu_button.draw(screen):
                 main_menu = True
                 game_paused = False
+                cap = cv2.VideoCapture('videos/unseated.mp4')
                 for music in sounds.music_list:
                     music.stop_sound()
             
